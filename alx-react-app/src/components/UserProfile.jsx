@@ -1,6 +1,5 @@
 // src/components/UserProfile.jsx
 const UserProfile = ({ name, age, bio }) => {
-  console.log(`Rendering UserProfile:`, { name, age, bio });
   return (
     <div className="profile-card">
       <h2>{name}</h2>
