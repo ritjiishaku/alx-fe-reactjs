@@ -10,3 +10,4 @@ const UserProfile = ({ name, age, bio }) => {
 };
 
 export default UserProfile;
+
