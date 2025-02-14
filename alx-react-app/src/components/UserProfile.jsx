@@ -1,13 +1,13 @@
-// // src/components/UserProfile.jsx
-// const UserProfile = ({ name, age, bio }) => {
-//   return (
-//     <div className="profile-card">
-//       <h2>{name}</h2>
-//       <p>Age: {age}</p>
-//       <p><strong>Bio:</strong> {bio}</p>
-//     </div>
-//   );
-// };
+import React from 'react'
 
-// export default UserProfile;
+const UserProfile = (props) => {
+    return (
+      <div>
+        <h2>{props.name}</h2>
+        <p>Age: {props.age}</p>
+        <p>Bio: {props.bio}</p>
+      </div>
+    );
+  };
 
+export default UserProfile
