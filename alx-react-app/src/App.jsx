@@ -15,7 +15,7 @@ function App() {
     <>
       <div>
         <UserProfile name="Ritji Ishaku" age={33} bio="I'm a novice in React" />
-        <UserProfile name="Jil Gyang" age="23" bio="Loves hiking and photography" />
+        <UserProfile name="Alice" age="25" bio="Loves hiking and photography" />
         <Header />
         <MainContent />
         <Footer />
