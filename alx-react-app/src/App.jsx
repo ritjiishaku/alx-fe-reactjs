@@ -14,8 +14,8 @@ function App() {
   return (
     <>
       <div>
-        <UserProfile name="Ikpe Victor" age={26} bio="I'm a novice in React" />
-        <UserProfile name="Alice" age="25" bio="Loves hiking and photography" />
+        <UserProfile name="Ritji Ishaku" age={33} bio="I'm a novice in React" />
+        <UserProfile name="Jil Gyang" age="23" bio="Loves hiking and photography" />
         <Header />
         <MainContent />
         <Footer />
