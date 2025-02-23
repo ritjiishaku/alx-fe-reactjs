@@ -1,37 +1,14 @@
 import { Link } from 'react-router-dom';
 
-const Navbar = () => {
+function Navbar() {
   return (
-    <nav style={styles.nav}>
-      <ul style={styles.navList}>
-        <li style={styles.navItem}><Link to="/" style={styles.navLink}>Home</Link></li>
-        <li style={styles.navItem}><Link to="/about" style={styles.navLink}>About</Link></li>
-        <li style={styles.navItem}><Link to="/services" style={styles.navLink}>Services</Link></li>
-        <li style={styles.navItem}><Link to="/contact" style={styles.navLink}>Contact</Link></li>
-      </ul>
+    <nav style={{ padding: '10px', background: '#eee' }}>
+      <Link to="/" style={{ margin: '10px' }}>Home</Link>
+      <Link to="/about" style={{ margin: '10px' }}>About</Link>
+      <Link to="/services" style={{ margin: '10px' }}>Services</Link>
+      <Link to="/contact" style={{ margin: '10px' }}>Contact</Link>
     </nav>
   );
-};
-
-const styles = {
-  nav: {
-    backgroundColor: "#333",
-    padding: "10px",
-  },
-  navList: {
-    display: "flex",
-    listStyle: "none",
-    justifyContent: "center",
-    padding: 0,
-  },
-  navItem: {
-    margin: "0 15px",
-  },
-  navLink: {
-    color: "#fff",
-    textDecoration: "none",
-    fontSize: "18px",
-  },
-};
+}
 
 export default Navbar;

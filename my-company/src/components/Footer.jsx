@@ -1,20 +1,9 @@
-const Footer = () => {
+function Footer() {
     return (
-      <footer style={styles.footer}>
-        <p>&copy; {new Date().getFullYear()} My Company. All rights reserved.</p>
+      <footer style={{ padding: '10px', background: '#eee', textAlign: 'center' }}>
+        <p>© 2025 My Company. All rights reserved.</p>
       </footer>
     );
-  };
-  
-  const styles = {
-    footer: {
-      textAlign: "center",
-      padding: "10px",
-      backgroundColor: "#333",
-      color: "#fff",
-      marginTop: "20px",
-    },
-  };
+  }
   
   export default Footer;
-  
