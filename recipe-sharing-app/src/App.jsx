@@ -1,7 +1,9 @@
+// App.js
+import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import RecipeList from './components/RecipeList';
-import AddRecipeForm from './components/AddRecipeForm';
-import RecipeDetails from './components/RecipeDetails';
+import FavoritesList from './components/FavoritesList';
+import RecommendationsList from './components/RecommendationsList';
 import SearchBar from './components/SearchBar';
 
 const App = () => {
@@ -9,11 +11,12 @@ const App = () => {
     <Router>
       <div>
         <h1>Recipe Sharing Application</h1>
-        <SearchBar /> {/* Add search functionality */}
-        <AddRecipeForm />
+        <SearchBar />
         <RecipeList />
+        <FavoritesList />
+        <RecommendationsList />
         <Routes>
-          <Route path="/recipe/:recipeId" element={<RecipeDetails />} />
+          {/* Add your other routes here */}
         </Routes>
       </div>
     </Router>
