@@ -11,7 +11,10 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-  "test": "jest"
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "jest",
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": [
@@ -36,8 +39,4 @@
     "@testing-library/react": "^16.2.0",
     "jest": "^27.5.1"
   }
-  
 }
-
-}
-
