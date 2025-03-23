@@ -9,34 +9,51 @@ const AddRecipeForm = () => {
     steps: "",
   });
 
-  const [error, setError] = useState("");
+  const [errors, setErrors] = useState({});
 
-  // Handle input changes
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+  // Validation Function
+  const validate = () => {
+    let tempErrors = {};
+
+    if (!formData.title.trim()) {
+      tempErrors.title = "Recipe title is required.";
+    }
+
+    if (!formData.ingredients.trim()) {
+      tempErrors.ingredients = "Please list at least two ingredients.";
+    } else {
+      const ingredientList = formData.ingredients.split(",").map((item) => item.trim());
+      if (ingredientList.length < 2) {
+        tempErrors.ingredients = "Please provide at least two ingredients.";
+      }
+    }
+
+    if (!formData.steps.trim()) {
+      tempErrors.steps = "Please provide preparation steps.";
+    }
+
+    setErrors(tempErrors);
+    return Object.keys(tempErrors).length === 0;
   };
 
-  // Handle form submission
+  // Handle Input Changes
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+
+    // Clear the specific error when user starts typing
+    setErrors({ ...errors, [e.target.name]: "" });
+  };
+
+  // Handle Form Submission
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Validation: Ensure all fields are filled
-    if (!formData.title || !formData.ingredients || !formData.steps) {
-      setError("All fields are required.");
-      return;
+    if (validate()) {
+      console.log("Submitted Recipe:", formData);
+
+      // Navigate back to home after submission (replace with API call)
+      navigate("/");
     }
-
-    // Ensure there are at least two ingredients
-    if (formData.ingredients.split(",").length < 2) {
-      setError("Please list at least two ingredients.");
-      return;
-    }
-
-    setError("");
-    console.log("Submitted Recipe:", formData);
-
-    // Navigate back to home after submission (replace with API call in real case)
-    navigate("/");
   };
 
   return (
@@ -44,8 +61,6 @@ const AddRecipeForm = () => {
       <h1 className="text-2xl font-bold text-center text-gray-800 mb-4">
         Add a New Recipe
       </h1>
-
-      {error && <p className="text-red-500 text-center">{error}</p>}
 
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Recipe Title */}
@@ -59,6 +74,7 @@ const AddRecipeForm = () => {
             className="w-full border p-2 rounded-lg focus:ring focus:ring-blue-300"
             placeholder="Enter recipe title"
           />
+          {errors.title && <p className="text-red-500 text-sm">{errors.title}</p>}
         </div>
 
         {/* Ingredients */}
@@ -72,6 +88,7 @@ const AddRecipeForm = () => {
             className="w-full border p-2 rounded-lg focus:ring focus:ring-blue-300"
             placeholder="List ingredients separated by commas (e.g., eggs, flour, sugar)"
           ></textarea>
+          {errors.ingredients && <p className="text-red-500 text-sm">{errors.ingredients}</p>}
         </div>
 
         {/* Preparation Steps */}
@@ -85,6 +102,7 @@ const AddRecipeForm = () => {
             className="w-full border p-2 rounded-lg focus:ring focus:ring-blue-300"
             placeholder="Describe the preparation steps"
           ></textarea>
+          {errors.steps && <p className="text-red-500 text-sm">{errors.steps}</p>}
         </div>
 
         {/* Submit Button */}
