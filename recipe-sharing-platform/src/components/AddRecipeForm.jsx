@@ -39,67 +39,62 @@ const AddRecipeForm = () => {
   // Handle Input Changes
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
-
-    // Clear the specific error when user starts typing
     setErrors({ ...errors, [e.target.name]: "" });
   };
 
   // Handle Form Submission
   const handleSubmit = (e) => {
     e.preventDefault();
-
     if (validate()) {
       console.log("Submitted Recipe:", formData);
-
-      // Navigate back to home after submission (replace with API call)
       navigate("/");
     }
   };
 
   return (
     <div className="max-w-2xl mx-auto p-6 bg-white shadow-lg rounded-lg mt-6">
-      <h1 className="text-2xl font-bold text-center text-gray-800 mb-4">
+      <h1 className="text-2xl font-bold text-center text-gray-800 mb-4 md:text-3xl">
         Add a New Recipe
       </h1>
 
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Recipe Title */}
-        <div>
-          <label className="block text-gray-700 font-medium">Recipe Title</label>
+        <div className="md:flex md:items-center">
+          <label className="block text-gray-700 font-medium md:w-1/3">Recipe Title</label>
           <input
             type="text"
             name="title"
             value={formData.title}
             onChange={handleChange}
-            className="w-full border p-2 rounded-lg focus:ring focus:ring-blue-300"
+            className="w-full md:w-2/3 border p-2 rounded-lg focus:ring focus:ring-blue-300"
             placeholder="Enter recipe title"
           />
           {errors.title && <p className="text-red-500 text-sm">{errors.title}</p>}
         </div>
 
         {/* Ingredients */}
-        <div>
-          <label className="block text-gray-700 font-medium">Ingredients</label>
+        <div className="md:flex md:items-center">
+          <label className="block text-gray-700 font-medium md:w-1/3">Ingredients</label>
           <textarea
             name="ingredients"
             value={formData.ingredients}
             onChange={handleChange}
             rows="3"
-            className="w-full border p-2 rounded-lg focus:ring focus:ring-blue-300"
+            className="w-full md:w-2/3 border p-2 rounded-lg focus:ring focus:ring-blue-300"
             placeholder="List ingredients separated by commas (e.g., eggs, flour, sugar)"
           ></textarea>
           {errors.ingredients && <p className="text-red-500 text-sm">{errors.ingredients}</p>}
         </div>
 
         {/* Preparation Steps */}
-        <div>
-          <label className="block text-gray-700 font-medium">Preparation Steps</label>
+        <div className="md:flex md:items-center">
+          <label className="block text-gray-700 font-medium md:w-1/3">Preparation Steps</label>
           <textarea
             name="steps"
             value={formData.steps}
             onChange={handleChange}
             rows="4"
-            className="w-full border p-2 rounded-lg focus:ring focus:ring-blue-300"
+            className="w-full md:w-2/3 border p-2 rounded-lg focus:ring focus:ring-blue-300"
             placeholder="Describe the preparation steps"
           ></textarea>
           {errors.steps && <p className="text-red-500 text-sm">{errors.steps}</p>}
@@ -108,7 +103,7 @@ const AddRecipeForm = () => {
         {/* Submit Button */}
         <button
           type="submit"
-          className="w-full bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-600 transition"
+          className="w-full md:w-1/3 bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-600 transition"
         >
           Submit Recipe
         </button>
