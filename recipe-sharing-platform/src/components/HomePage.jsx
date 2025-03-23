@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 
 const HomePage = () => {
   const [recipes, setRecipes] = useState([]);
 
   useEffect(() => {
-    // Fetch the mock data
     fetch("/data.json")
       .then((response) => response.json())
       .then((data) => setRecipes(data))
@@ -21,9 +21,9 @@ const HomePage = () => {
             <div className="p-4">
               <h2 className="text-xl font-semibold">{recipe.title}</h2>
               <p className="text-gray-600 mt-2">{recipe.summary}</p>
-              <a href={`/recipe/${recipe.id}`} className="text-blue-500 mt-3 inline-block">
+              <Link to={`/recipe/${recipe.id}`} className="text-blue-500 mt-3 inline-block">
                 View Recipe →
-              </a>
+              </Link>
             </div>
           </div>
         ))}
