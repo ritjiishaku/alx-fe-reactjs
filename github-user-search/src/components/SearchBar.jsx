@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { searchGitHubUser } from '../services/githubService'
+import { fetchUserData } from '../services/githubService'
 
 const SearchBar = ({ onUserFound }) => {
   const [username, setUsername] = useState('')
@@ -8,15 +8,16 @@ const SearchBar = ({ onUserFound }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    if (!username) return
+    if (!username.trim()) return
     
     setLoading(true)
     setError(null)
+    
     try {
-      const userData = await searchGitHubUser(username)
+      const userData = await fetchUserData(username)
       onUserFound(userData)
     } catch (err) {
-      setError('User not found')
+      setError('Looks like we can\'t find the user')
       onUserFound(null)
     } finally {
       setLoading(false)
@@ -30,8 +31,9 @@ const SearchBar = ({ onUserFound }) => {
         value={username}
         onChange={(e) => setUsername(e.target.value)}
         placeholder="Enter GitHub username"
+        disabled={loading}
       />
-      <button type="submit" disabled={loading}>
+      <button type="submit" disabled={loading || !username.trim()}>
         {loading ? 'Searching...' : 'Search'}
       </button>
       {error && <p className="error">{error}</p>}
