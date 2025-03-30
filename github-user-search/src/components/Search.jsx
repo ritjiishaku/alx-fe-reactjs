@@ -1,58 +1,64 @@
 import { useState } from "react";
-import { fetchUserData } from "../services/githubService";
+import axios from "axios";
 
 const Search = () => {
-    const [username, setUsername] = useState("");
-    const [user, setUser] = useState(null);
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(null);
+  const [query, setQuery] = useState("");
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-    const handleSearch = async (e) => {
-        e.preventDefault();
-        setLoading(true);
-        setError(null);
-        setUser(null);
+  const fetchUserData = async () => {
+    setLoading(true);
+    setError("");
+    setUser(null);
 
-        try {
-            const userData = await fetchUserData(username);
-            if (userData) {
-                setUser(userData);
-            } else {
-                setError("Looks like we can't find the user");
-            }
-        } catch (err) {
-            setError("An error occurred while fetching user data");
-        } finally {
-            setLoading(false);
-        }
-    };
+    try {
+      const response = await axios.get(`https://api.github.com/users/${query}`);
+      setUser(response.data);
+    } catch (err) {
+      setError("Looks like we can't find the user");
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    return (
-        <div className="search-container">
-            <form onSubmit={handleSearch}>
-                <input
-                    type="text"
-                    placeholder="Enter GitHub username"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                />
-                <button type="submit">Search</button>
-            </form>
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (query.trim() !== "") {
+      fetchUserData();
+    }
+  };
 
-            {loading && <p>Loading...</p>}
-            {error && <p>{error}</p>}
+  return (
+    <div className="p-4">
+      <form onSubmit={handleSubmit} className="mb-4 flex gap-2">
+        <input
+          type="text"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          placeholder="Search GitHub username..."
+          className="border p-2 rounded w-full"
+        />
+        <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">
+          Search
+        </button>
+      </form>
 
-            {user && (
-                <div className="user-info">
-                    <img src={user.avatar_url} alt={user.login} width="100" />
-                    <h2>{user.name || user.login}</h2>
-                    <a href={user.html_url} target="_blank" rel="noopener noreferrer">
-                        View Profile
-                    </a>
-                </div>
-            )}
+      {loading && <p>Loading...</p>}
+
+      {error && <p className="text-red-500">{error}</p>}
+
+      {user && (
+        <div className="border p-4 rounded shadow-md">
+          <img src={user.avatar_url} alt={user.login} className="w-16 h-16 rounded-full" />
+          <h2 className="text-lg font-bold">{user.name || user.login}</h2>
+          <a href={user.html_url} target="_blank" rel="noopener noreferrer" className="text-blue-500">
+            View Profile
+          </a>
         </div>
-    );
+      )}
+    </div>
+  );
 };
 
 export default Search;
