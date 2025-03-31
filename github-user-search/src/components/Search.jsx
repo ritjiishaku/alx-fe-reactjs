@@ -17,7 +17,7 @@ const Search = ({ onUserFound }) => {
       const userData = await fetchUserData(username)
       onUserFound(userData)
     } catch (err) {
-      setError('Looks like we can\'t find the user')
+      setError('Looks like we cant find the user')
       onUserFound(null)
     } finally {
       setLoading(false)
@@ -25,19 +25,35 @@ const Search = ({ onUserFound }) => {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="search-bar">
-      <input
-        type="text"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-        placeholder="Enter GitHub username"
-        disabled={loading}
-      />
-      <button type="submit" disabled={loading || !username.trim()}>
-        {loading ? 'Searching...' : 'Search'}
-      </button>
-      {error && <p className="error">{error}</p>}
-    </form>
+    <div className="search-container">
+      <form onSubmit={handleSubmit} className="search-form">
+        <div className="input-group">
+          <input
+            type="text"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            placeholder="Enter GitHub username"
+            disabled={loading}
+          />
+          <button type="submit" disabled={loading || !username.trim()}>
+            {loading ? 'Searching...' : 'Search'}
+          </button>
+        </div>
+        {error && <p className="error-message">{error}</p>}
+      </form>
+
+      {/* Example user display with avatar_url and login */}
+      {loading && (
+        <div className="user-loading">
+          <img 
+            src="https://via.placeholder.com/150" 
+            alt="Loading avatar" 
+            className="avatar-placeholder"
+          />
+          <p>Loading user data...</p>
+        </div>
+      )}
+    </div>
   )
 }
 
