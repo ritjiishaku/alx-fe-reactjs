@@ -1,28 +1,31 @@
-import { useState } from 'react'
-import { fetchUserData } from '../services/githubService'
+import { useState } from 'react';
+import { fetchUserData } from '../services/githubService';
 
-const Search = ({ onUserFound }) => {
-  const [username, setUsername] = useState('')
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState(null)
+const Search = ({ onUsersFound }) => {
+  const [username, setUsername] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [users, setUsers] = useState([]);
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    if (!username.trim()) return
+    e.preventDefault();
+    if (!username.trim()) return;
     
-    setLoading(true)
-    setError(null)
+    setLoading(true);
+    setError(null);
     
     try {
-      const userData = await fetchUserData(username)
-      onUserFound(userData)
+      const userData = await fetchUserData(username);
+      setUsers([userData]); // Store single user in array for consistent mapping
+      onUsersFound([userData]);
     } catch (err) {
-      setError('Looks like we cant find the user')
-      onUserFound(null)
+      setError('Looks like we cant find the user');
+      setUsers([]);
+      onUsersFound([]);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <div className="search-container">
@@ -42,19 +45,39 @@ const Search = ({ onUserFound }) => {
         {error && <p className="error-message">{error}</p>}
       </form>
 
-      {/* Example user display with avatar_url and login */}
+      {/* Map through users to display results */}
+      <div className="user-results">
+        {users.map(user => (
+          <div key={user.id} className="user-card">
+            <img 
+              src={user.avatar_url} 
+              alt={user.login} 
+              className="user-avatar"
+            />
+            <div className="user-info">
+              <h3>{user.name || user.login}</h3>
+              <p>Username: {user.login}</p>
+              {user.bio && <p className="user-bio">{user.bio}</p>}
+              <a 
+                href={user.html_url} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="profile-link"
+              >
+                View Profile
+              </a>
+            </div>
+          </div>
+        ))}
+      </div>
+
       {loading && (
-        <div className="user-loading">
-          <img 
-            src="https://via.placeholder.com/150" 
-            alt="Loading avatar" 
-            className="avatar-placeholder"
-          />
+        <div className="loading-indicator">
           <p>Loading user data...</p>
         </div>
       )}
     </div>
-  )
-}
+  );
+};
 
-export default Search
+export default Search;
