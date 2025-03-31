@@ -1,10 +1,11 @@
 import axios from 'axios';
 
-const GITHUB_API_URL = 'https://api.github.com';
+const BASE_API_URL = 'https://api.github.com';
+const SEARCH_USERS_URL = `${BASE_API_URL}/search/users?q=`;
 
 export const fetchUserData = async (username) => {
   try {
-    const response = await axios.get(`${GITHUB_API_URL}/users/${username}`);
+    const response = await axios.get(`${BASE_API_URL}/users/${username}`);
     return response.data;
   } catch (error) {
     if (error.response?.status === 404) {
@@ -14,22 +15,24 @@ export const fetchUserData = async (username) => {
   }
 };
 
-export const searchGitHubUsers = async (queryParams) => {
+export const searchUsers = async (searchParams) => {
   try {
-    const { username, location, minRepos, language } = queryParams;
-    let query = [];
+    const { username, minRepos, location, language } = searchParams;
     
-    if (username) query.push(`${username} in:login`);
-    if (location) query.push(`location:${location}`);
-    if (minRepos) query.push(`repos:>${minRepos}`);
-    if (language) query.push(`language:${language}`);
+    // Build query string
+    let queryParts = [];
+    if (username) queryParts.push(`${username} in:login`);
+    if (minRepos) queryParts.push(`repos:>${minRepos}`);
+    if (location) queryParts.push(`location:${location}`);
+    if (language) queryParts.push(`language:${language}`);
     
-    if (query.length === 0) {
+    if (queryParts.length === 0) {
       throw new Error('Please provide at least one search parameter');
     }
 
+    // Make the search request with explicit search URL
     const response = await axios.get(
-      `${GITHUB_API_URL}/search/users?q=${query.join('+')}`,
+      `${SEARCH_USERS_URL}${queryParts.join('+')}`,
       {
         params: {
           per_page: 10
@@ -37,23 +40,22 @@ export const searchGitHubUsers = async (queryParams) => {
       }
     );
 
-    // Fetch detailed data for each user
-    const users = await Promise.all(
+    // Fetch detailed data for each found user
+    const usersWithDetails = await Promise.all(
       response.data.items.map(async (user) => {
         try {
-          const userDetails = await fetchUserData(user.login);
-          return userDetails;
+          return await fetchUserData(user.login);
         } catch (error) {
-          console.error(`Failed to fetch details for user ${user.login}:`, error);
+          console.error(`Failed to fetch details for ${user.login}:`, error);
           return null;
         }
       })
     );
 
-    return users.filter(user => user !== null);
+    return usersWithDetails.filter(user => user !== null);
   } catch (error) {
     if (error.response?.status === 403) {
-      throw new Error('API rate limit exceeded');
+      throw new Error('API rate limit exceeded. Please try again later.');
     }
     throw error;
   }
